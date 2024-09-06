@@ -16,7 +16,13 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_17)
         }
     }
-    jvm("desktop")
+
+    jvm("desktop") {
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
+        }
+    }
 
     sourceSets {
         val desktopMain by getting
