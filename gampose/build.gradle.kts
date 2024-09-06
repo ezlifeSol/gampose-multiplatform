@@ -76,7 +76,16 @@ afterEvaluate {
                 from (components["release"])
                 groupId = "com.ezlifesol.library"
                 artifactId = "gampose-multiplatform"
-                version = "1.0.0-alpha03"
+                version = "1.0.0-alpha06"
+            }
+            register<MavenPublication>("release") {
+                groupId = "com.ezlifesol.library"
+                artifactId = "gampose-multiplatform"
+                version = "1.0.0-alpha06"
+
+                afterEvaluate {
+                    from(components["release"])
+                }
             }
         }
         repositories {
