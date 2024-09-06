@@ -73,10 +73,13 @@ afterEvaluate {
     publishing {
         publications {
             create<MavenPublication>("maven") {
-                from (components["release"])
                 groupId = "com.ezlifesol.library"
                 artifactId = "gampose-multiplatform"
                 version = "1.0.0-alpha06"
+
+                afterEvaluate {
+                    from(components["release"])
+                }
             }
             register<MavenPublication>("release") {
                 groupId = "com.ezlifesol.library"
