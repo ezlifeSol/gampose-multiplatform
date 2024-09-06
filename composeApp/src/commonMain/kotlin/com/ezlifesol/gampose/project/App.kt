@@ -31,7 +31,7 @@ fun App() {
             AnimatedVisibility(showContent) {
                 val greeting = remember { Greeting().greet() }
                 Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                    GameSprite(assetPath = "b.png", size = GameSize(200f, 200f))
+                    GameSprite(resourceId = Res.drawable.compose_multiplatform, size = GameSize(200f, 200f))
                     Text("Compose: $greeting")
                 }
             }

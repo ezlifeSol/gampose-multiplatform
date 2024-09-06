@@ -4,10 +4,11 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
-    id("org.jetbrains.kotlin.multiplatform") version "2.0.20" // Thay bằng phiên bản Kotlin bạn muốn
-    id("com.android.library") version "8.2.2" // Thay bằng phiên bản Android Gradle plugin
-    id("org.jetbrains.compose") version "1.6.11" // Phiên bản của Compose
-    id("org.jetbrains.kotlin.plugin.compose") version "2.0.20" // Thay bằng phiên bản Kotlin bạn muốn
+    id("org.jetbrains.kotlin.multiplatform") version "2.0.20"
+    id("com.android.library") version "8.2.2"
+    id("org.jetbrains.compose") version "1.6.11"
+    id("org.jetbrains.kotlin.plugin.compose") version "2.0.20"
+    id("maven-publish")
 }
 
 kotlin {
@@ -26,6 +27,9 @@ kotlin {
                 }
             }
         }
+        publishing {
+            withSourcesJar()
+        }
         binaries.executable()
     }
     
@@ -36,7 +40,11 @@ kotlin {
         }
     }
 
-    jvm("desktop")
+    jvm("desktop") {
+        publishing {
+            withSourcesJar()
+        }
+    }
 
 //    listOf(
 //        iosX64(),
@@ -76,18 +84,8 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.8.1")
             }
         }
-
-        val wasmJsMain by getting {
-            dependencies {
-                implementation(kotlin("stdlib-js"))
-                implementation(kotlin("js"))
-            }
-        }
     }
 }
-
-group = "com.ezlifesol.library.gampose"
-version = "1.0.0"
 
 repositories {
     google()
@@ -97,12 +95,38 @@ repositories {
 
 android {
     namespace = "com.ezlifesol.library.gampose"
-    compileSdk = 33
+    compileSdk = 34
     defaultConfig {
-        minSdk = 21
+        minSdk = 26
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+    }
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            register<MavenPublication>("release") {
+                groupId = "com.ezlifesol.library"
+                artifactId = "gampose-multiplatform"
+                version = "1.0.0-alpha01"
+
+                afterEvaluate {
+                    from(components["release"])
+                }
+            }
+        }
+        repositories {
+            maven {
+                url = uri("https://jitpack.io")
+            }
+        }
     }
 }
